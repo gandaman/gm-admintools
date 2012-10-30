@@ -45,9 +45,10 @@ REMOTEHOST=`echo $1 | sed -e 's/^.*@//'`
 
 echo "INFO: Disabling automatic login to ${REMOTEUSER}@${REMOTEHOST}"
 
+# This function makes no sense if keys are not available
 if [ ! -e ${HOME}/.ssh/id_rsa.pub ]; then
-    echo "WARNING: Missing SSH public/private keypair"
-    ssh-keygen
+    echo "Missing SSH public/private keypair. Nothing to do."
+    exit
 fi
 
 cat ${HOME}/.ssh/id_rsa.pub | ssh ${REMOTEUSER}@${REMOTEHOST} \
