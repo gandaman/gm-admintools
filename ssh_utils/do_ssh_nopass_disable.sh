@@ -32,16 +32,23 @@ set -e
 PROGNAME=`basename $0`
 echo "INFO: ${PROGNAME} - v0.1"
 
-if [ $# -lt 1 ]; then
+usage() {
     echo "Usage: ${PROGNAME} remoteuser@remotehost"
     exit 1
+}
+
+if [ $# -lt 1 ]; then
+    usage
+fi
+
+# Check that parameter has the right format
+echo $1 | grep -q -P '^[0-9a-z_\-\.]+@[0-9a-z_\-\.]+$' 
+if [ $? != 0 ] ; then
+   usage
 fi
 
 REMOTEUSER=`echo $1 | sed -e 's/\@.*$//'`
 REMOTEHOST=`echo $1 | sed -e 's/^.*@//'`
-
-#echo "DEBUG: REMOTEUSER=$REMOTEUSER"
-#echo "DEBUG: REMOTEHOST=$REMOTEHOST"
 
 echo "INFO: Disabling automatic login to ${REMOTEUSER}@${REMOTEHOST}"
 
